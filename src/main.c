@@ -2,14 +2,17 @@
 #include <stdio.h>
 #include <common.h>
 #include <util/delay.h>
+#include <avr/wdt.h>
+
 
 
 int main()
 {
-    stdio_init(115200);
-    while (1) {
-        printf("X\n");
-        _delay_ms(1000);
-    }
-    while (1);
+	wdt_disable();
+	stdio_init();
+        xmem_init();
+        memset(0x2200, 0x0, 128);
+        xmem_test();
+        xmem_dump(0x128);
+        
 }

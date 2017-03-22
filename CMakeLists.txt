@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0)
 set(CROSS_COMPILE avr)
 set(CMAKE_TOOLCHAIN_FILE cmake/toolchain.cmake)
 
-set(CONFIG_MCU atmega328p)
+set(CONFIG_MCU atmega1280)
 set(CONFIG_F_CPU 16000000)
 
 
@@ -20,9 +20,11 @@ set(target ${PROJECT_NAME})
 add_executable(${target}
   src/stdio.c
   src/main.c
+  src/xmem.c
 )
 
-set(CMAKE_C_FLAGS "-mmcu=${CONFIG_MCU} -DF_CPU=${CONFIG_F_CPU} -Os")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mmcu=${CONFIG_MCU} -DF_CPU=${CONFIG_F_CPU} -Os")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-u,vfprintf -lprintf_flt -Wl,-u,vfscanf -lscanf_flt")
 #add_definitions(-DF_CPU=${CONFIG_F_CPU})
 #add_definitions(-D__DELAY_BACKWARD_COMPATIBLE__)
 
@@ -49,6 +51,5 @@ DEPENDS uisp-loader
 
 add_custom_target(
   deploy
-#  COMMAND avrdude -c arduino -p m1280 -P /dev/ttyACM0 -b 57600 -U flash:w:${target}.hex
-  COMMAND avrdude -c powerhub -p m1280 -U flash:w:${target}.hex
+  COMMAND avrdude -c arduino -p ${CONFIG_MCU} -P /dev/ttyUSB0 -b 57600 -U flash:w:${target}.hex
 )

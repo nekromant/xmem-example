@@ -12,7 +12,8 @@ int main()
 	stdio_init();
         xmem_init();
         memset(0x2200, 0x0, 128);
+        xmem_test_bits();
         xmem_test();
         xmem_dump(0x128);
-        
+
 }

@@ -21,6 +21,7 @@ add_executable(${target}
   src/stdio.c
   src/main.c
   src/xmem.c
+  src/xmem_bitbang.c
 )
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mmcu=${CONFIG_MCU} -DF_CPU=${CONFIG_F_CPU} -Os")

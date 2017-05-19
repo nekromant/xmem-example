@@ -6,11 +6,21 @@
 
 void xmem_init()
 {
+        MCUCSR=(1<<JTD);
+
         PORTC=0xff;
         DDRC=0xff;
         XMCRB = 0;
         /* RTFM: m1280 datasheet, p. 33 */
         XMCRA = (1<<SRE) | (1<<SRW00) | (1<<SRW01) | (1<<SRW10) | (1<<SRW11) ;
+
+        /* Enable SRAM chip */
+        /* CE - Low */
+        DDRB |= 1<<0;
+        PORTB|= ~(1<<0);
+        /* CE2 - High */
+        DDRF |= 1<<0;
+        PORTF |= 1<<0;
 
 }
 
@@ -41,6 +51,8 @@ void xmem_test_bits()
             printf("bit %d is stuck in 0\n", i);
             total++;
         }
+        *xptr = ~(1 << i);
+        _delay_ms(50);
         *xptr = ~(1 << i);
         _delay_ms(50);
         if (! (~(*xptr) & (1 <<i))) {

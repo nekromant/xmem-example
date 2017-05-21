@@ -6,7 +6,7 @@
 #include <string.h> 
 
 void writeByte( uint16_t add, uint8_t data) {
-  DDRG  = 0xFF;
+  DDRG  = 0xFF; //set to input
   PORTG |= (1<<PG2)|(1<<PG0);
   DDRA = 0xFF;
   PORTA = (add&0xFF);
@@ -29,7 +29,7 @@ uint8_t readByte( uint16_t add) {
   DDRC = 0xFF;
   PORTC = (add >> 8);
   PORTG &= ~(1<<PG2);
-  DDRA = 0x00;
+  DDRA = 0x00; //set to output
   _delay_ms(50);
   data = PINA;
   _delay_ms(50);
